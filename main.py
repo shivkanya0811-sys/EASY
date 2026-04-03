@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from auth import router as auth_router # Only import the router itself
 from resources import router as resources_router
-from database import database # Import the database object directly
+from database import database, initialize_database # Import the database object directly
 from websocket import router as websocket_router
 from websocket import router as websocket_router
 app = FastAPI(title="FocusMate API")
@@ -33,6 +33,7 @@ def root():
 async def startup():
     # Call the connect method on the database object
     await database.connect()
+    initialize_database()
     
 @app.on_event("shutdown")
 async def shutdown():
