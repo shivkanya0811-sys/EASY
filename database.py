@@ -1,3 +1,4 @@
+
 from fastapi import HTTPException
 from databases import Database
 from sqlalchemy import create_engine, text, inspect
@@ -10,14 +11,16 @@ logger = logging.getLogger(__name__)
 
 DATABASE_URL = os.environ.get(
     "DATABASE_URL", 
-    "postgresql+psycopg2://postgres:easy4@localhost:5432/mydatabase"
+    "postgresql://postgres:easy4@localhost:5432/mydatabase"  
 )
 engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
-ASYNC_DATABASE_URL = DATABASE_URL.replace("postgresql+psycopg2://", "postgresql://")
-database = Database(ASYNC_DATABASE_URL, ssl=True)
-
+#ASYNC_DATABASE_URL = DATABASE_URL.replace("postgresql+psycopg2://", "postgresql://")
+if "render.com" in DATABASE_URL:
+    database = Database(DATABASE_URL, ssl=True)
+else:
+    database = Database(DATABASE_URL, ssl=False)
 def get_db():
     db = SessionLocal()
     try:
