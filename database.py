@@ -16,7 +16,7 @@ engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 ASYNC_DATABASE_URL = DATABASE_URL.replace("postgresql+psycopg2://", "postgresql://")
-database = Database(ASYNC_DATABASE_URL)
+database = Database(ASYNC_DATABASE_URL, ssl=True)
 
 def get_db():
     db = SessionLocal()
